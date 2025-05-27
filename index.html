@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fase 1: O Começo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap');
+        
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a001a 100%);
+            min-height: 100vh;
+            font-family: 'Cinzel Decorative', serif;
+        }
+        
+        .raven-shadow {
+            filter: drop-shadow(0 0 15px rgba(106, 13, 173, 0.9));
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.9);
+        }
+        
+        .flicker {
+            animation: flicker 5s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 22%, 24%, 55% {
+                opacity: 0.6;
+            }
+        }
+        
+        .mystery-bird {
+            transition: all 0.5s ease;
+            transform-origin: center;
+            animation: float 4s ease-in-out infinite;
+            position: relative;
+        }
+        
+        .mystery-bbird:hover {
+            transform: scale(1.1) rotate(-5deg);
+            filter: drop-shadow(0 0 20px rgba(138, 43, 226, 1));
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .corner-image {
+            position: fixed;
+            left: 30px;
+            bottom: 30px;
+            width: 220px;
+            height: auto;
+            opacity: 0.5;
+            transition: all 0.4s ease;
+            z-index: 10;
+            filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.7));
+        }
+        
+        .corner-image:hover {
+            opacity: 0.7;
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.9));
+        }
+        
+        /* Answer button styles */
+        .answer-btn {
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.7) 0%, rgba(49, 0, 98, 0.7) 100%);
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            color: #e9d5ff;
+            font-family: 'Cinzel Decorative', serif;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+            position: relative;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        
+        .answer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.9) 0%, rgba(49, 0, 98, 0.9) 100%);
+        }
+        
+        .answer-btn:active {
+            transform: translateY(0);
+        }
+        
+        .answer-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% {
+                transform: rotate(30deg) translate(-30%, -30%);
+            }
+            100% {
+                transform: rotate(30deg) translate(30%, 30%);
+            }
+        }
+        
+        /* Success state button */
+        .answer-btn.success {
+            background: linear-gradient(135deg, rgba(17, 17, 78, 0.9) 0%, rgba(8, 8, 40, 0.9) 100%);
+            border-color: rgba(68, 68, 255, 0.5);
+            color: #b8c2ff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Next step button - updated to match answer button style */
+        .next-step-btn {
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.7) 0%, rgba(49, 0, 98, 0.7) 100%);
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            color: #e9d5ff;
+            font-family: 'Cinzel Decorative', serif;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+            position: relative;
+            overflow: hidden;
+            margin: 1.5rem auto;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+        
+        .next-step-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.9) 0%, rgba(49, 0, 98, 0.9) 100%);
+        }
+        
+        .next-step-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        /* Answer modal styles */
+        .answer-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(15, 15, 15, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .answer-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .answer-container {
+            background: linear-gradient(135deg, #1a001a 0%, #0f0f0f 100%);
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+            position: relative;
+        }
+        
+        .answer-container h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #e9d5ff;
+            text-align: center;
+        }
+        
+        .answer-input {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: rgba(15, 15, 15, 0.7);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 0.25rem;
+            color: #e9d5ff;
+            font-family: 'Cinzel Decorative', serif;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: rgba(138, 43, 226, 0.7);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.9) 0%, rgba(49, 0, 98, 0.9) 100%);
+            color: #e9d5ff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-family: 'Cinzel Decorative', serif;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #e9d5ff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            opacity: 1;
+        }
+        
+        /* Success message */
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #e9d5ff;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Confetti effect */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #8a2be2;
+            opacity: 0;
+            z-index: 999;
+            animation: confetti-fall 3s ease-in-out forwards;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+    <!-- Gaius sussurra sempre três passos a frente  -->
+</head>
+<body class="text-purple-200 flex flex-col items-center justify-center p-4">
+    <!-- Corner image positioned bottom left with increased size and reduced opacity -->
+    <img src="https://i.postimg.cc/fLDQ7F4D/g.png" alt="Hidden clue" class="corner-image">
+    
+    <div class="max-w-2xl w-full text-center space-y-6">
+        <h1 class="text-3xl md:text-5xl font-bold glow-text flicker">iudicium creationis</h1>
+        
+        <p class="text-base md:text-xl italic mt-4 glow-text">
+            Sub Velamento Aetatum
+        </p>
+        
+        <div class="mt-6 raven-shadow flex justify-center">
+            <img src="https://i.postimg.cc/yNYpjzQ1/a.png" alt="Mysterious Raven" 
+                 class="mystery-bbird w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain pulse">
+        </div>
+        
+        <!-- Modified answer button -->
+        <button id="openAnswerBtn" class="answer-btn glow-text">
+            Escrever Resposta
+        </button>
+        
+        <div id="successMessage" class="success-message">
+            Resposta correta! O caminho se abre diante de você...
+        </div>
+        
+        <!-- Next step button (initially hidden) - updated to match answer button style -->
+        <button id="nextStepBtn" class="next-step-btn glow-text">
+            Próxima Etapa →
+        </button>
+        
+        <div class="mt-3 text-sm text-purple-400 italic">
+            d yhugdgh hvwá qdv uxíqdv hvtxhflgdv
+        </div>
+    </div>
+
+    <!-- Answer Modal -->
+    <div id="answerModal" class="answer-modal">
+        <div class="answer-container">
+            <button id="closeAnswerBtn" class="close-btn">×</button>
+            <h3>Insira sua resposta</h3>
+            <textarea id="answerInput" class="answer-input" rows="4" placeholder="Digite sua resposta aqui..."></textarea>
+            <button id="submitAnswerBtn" class="submit-btn">Enviar Resposta</button>
+            <div id="errorMessage" class="text-red-400 text-center mt-2 hidden">Resposta incorreta. Tente novamente.</div>
+        </div>
+    </div>
+
+    <script>
+        // Answer modal functionality
+        const openAnswerBtn = document.getElementById('openAnswerBtn');
+        const closeAnswerBtn = document.getElementById('closeAnswerBtn');
+        const answerModal = document.getElementById('answerModal');
+        const submitAnswerBtn = document.getElementById('submitAnswerBtn');
+        const answerInput = document.getElementById('answerInput');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const nextStepBtn = document.getElementById('nextStepBtn');
+        
+        // List of accepted answers (case and accent insensitive)
+        const acceptedAnswers = [
+            'ruínas', 'ruinas', 'Ruínas', 'Ruinas', 
+            'RUÍNAS', 'RUINAS', 'ruína', 'ruina',
+            'Ruína', 'Ruina', 'RUÍNA', 'RUINA'
+        ];
+        
+        openAnswerBtn.addEventListener('click', () => {
+            answerModal.classList.add('active');
+            answerInput.focus();
+            errorMessage.classList.add('hidden');
+        });
+        
+        closeAnswerBtn.addEventListener('click', () => {
+            answerModal.classList.remove('active');
+        });
+        
+        submitAnswerBtn.addEventListener('click', () => {
+            const answer = answerInput.value.trim();
+            
+            if (!answer) {
+                errorMessage.textContent = 'Por favor, digite sua resposta antes de enviar.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+            
+            // Normalize the answer by removing accents and converting to lowercase
+            const normalizedAnswer = answer.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            const normalizedAccepted = acceptedAnswers.map(a => 
+                a.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+            );
+            
+            if (normalizedAccepted.includes(normalizedAnswer)) {
+                // Correct answer
+                answerInput.value = '';
+                answerModal.classList.remove('active');
+                successMessage.style.display = 'block';
+                nextStepBtn.style.display = 'block';
+                
+                // Create confetti effect
+                createConfetti();
+                
+                // Change button style to indicate success
+                openAnswerBtn.textContent = '✓ Resposta Correta';
+                openAnswerBtn.classList.add('success');
+                openAnswerBtn.style.cursor = 'default';
+                openAnswerBtn.onclick = null;
+                
+                // Hide the error message if it was shown
+                errorMessage.classList.add('hidden');
+            } else {
+                // Incorrect answer
+                errorMessage.textContent = 'Resposta incorreta. Tente novamente.';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+        
+        // Next step button functionality
+nextStepBtn.addEventListener('click', () => {
+    window.location.href = "energia3.html";
+});
+
+        
+        // Close modal when clicking outside
+        answerModal.addEventListener('click', (e) => {
+            if (e.target === answerModal) {
+                answerModal.classList.remove('active');
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && answerModal.classList.contains('active')) {
+                answerModal.classList.remove('active');
+            }
+        });
+        
+        // Confetti effect function
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = '#8a2be2';
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>

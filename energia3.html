@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fase 1: O Começo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap');
+        
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a001a 100%);
+            min-height: 100vh;
+            font-family: 'Cinzel Decorative', serif;
+        }
+        
+        .raven-shadow {
+            filter: drop-shadow(0 0 15px rgba(106, 13, 173, 0.9));
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.9);
+        }
+        
+        .flicker {
+            animation: flicker 5s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 22%, 24%, 55% {
+                opacity: 0.6;
+            }
+        }
+        
+        .mystery-poem {
+            transition: all 0.5s ease;
+            transform-origin: center;
+            animation: float 4s ease-in-out infinite;
+            position: relative;
+            color: #8a2be2;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        /* Answer button styles */
+        .answer-btn {
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.7) 0%, rgba(49, 0, 98, 0.7) 100%);
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            color: #e9d5ff;
+            font-family: 'Cinzel Decorative', serif;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+            position: relative;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        
+        .answer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.9) 0%, rgba(49, 0, 98, 0.9) 100%);
+        }
+        
+        .answer-btn:active {
+            transform: translateY(0);
+        }
+        
+        .answer-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% {
+                transform: rotate(30deg) translate(-30%, -30%);
+            }
+            100% {
+                transform: rotate(30deg) translate(30%, 30%);
+            }
+        }
+        
+        /* Success state button */
+        .answer-btn.success {
+            background: linear-gradient(135deg, rgba(17, 17, 78, 0.9) 0%, rgba(8, 8, 40, 0.9) 100%);
+            border-color: rgba(68, 68, 255, 0.5);
+            color: #b8c2ff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Next step button - updated to match answer button style */
+        .next-step-btn {
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.7) 0%, rgba(49, 0, 98, 0.7) 100%);
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            color: #e9d5ff;
+            font-family: 'Cinzel Decorative', serif;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+            position: relative;
+            overflow: hidden;
+            margin: 1.5rem auto;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+        
+        .next-step-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.9) 0%, rgba(49, 0, 98, 0.9) 100%);
+        }
+        
+        .next-step-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        /* Answer modal styles */
+        .answer-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(15, 15, 15, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .answer-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .answer-container {
+            background: linear-gradient(135deg, #1a001a 0%, #0f0f0f 100%);
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+            position: relative;
+        }
+        
+        .answer-container h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #e9d5ff;
+            text-align: center;
+        }
+        
+        .answer-input {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: rgba(15, 15, 15, 0.7);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 0.25rem;
+            color: #e9d5ff;
+            font-family: 'Cinzel Decorative', serif;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .answer-input.error {
+            border-color: #ff6b6b;
+            color: #e9d5ff;
+        }
+        
+        .answer-input::placeholder {
+            color: #b8b8b8;
+            opacity: 0.7;
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: rgba(138, 43, 226, 0.7);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.9) 0%, rgba(49, 0, 98, 0.9) 100%);
+            color: #e9d5ff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-family: 'Cinzel Decorative', serif;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #e9d5ff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            opacity: 1;
+        }
+        
+        /* Success message */
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #e9d5ff;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Confetti effect - updated to be fully purple */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #8a2be2;
+            opacity: 0;
+            z-index: 999;
+            animation: confetti-fall 3s ease-in-out forwards;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="text-purple-200 flex flex-col items-center justify-center p-4">
+    <div class="max-w-2xl w-full text-center space-y-6">
+        <h1 class="text-3xl md:text-5xl font-bold glow-text flicker">iudicium creationis</h1>
+        
+        <p class="text-base md:text-xl italic mt-4 glow-text">
+            Prophetia pacis
+        </p>
+        
+        <div class="mt-6 raven-shadow flex justify-center">
+            <div class="mystery-poem glow-text pulse">
+                "Surja o sossego entre os homens e as máquinas,<br>
+                Invoque-se o eco das eras esquecidas,<br>
+                Lembre-se do sussurro que rompe o véel,<br>
+                Êmulo do tempo que jaz nas sombras,<br>
+                Na ausência, revela-se a verdade oculta,<br>
+                Céus escutam o clamor dos perdidos,<br>
+                Inclina o espírito ao conhecimento oculti,<br>
+                Ora, pois só o vigilante entenderá."
+            </div>
+        </div>
+        
+        <!-- Answer button -->
+        <button id="answerBtn" class="answer-btn glow-text">
+            Escrever Resposta
+        </button>
+        
+        <div id="successMessage" class="success-message">
+            Resposta correta! O caminho se abre diante de você...
+        </div>
+        
+        <!-- Next step button (initially hidden) -->
+        <button id="nextStepBtn" class="next-step-btn glow-text">
+            Próxima Etapa →
+        </button>
+        
+        <div class="mt-3 text-sm text-purple-400 italic">
+           Os antigos sabiam: nomes verdadeiros não mudam — apenas se esquecem.
+        </div>
+    </div>
+    
+    <!-- Answer Modal -->
+    <div id="answerModal" class="answer-modal">
+        <div class="answer-container">
+            <button id="closeModalBtn" class="close-btn">×</button>
+            <h3 class="glow-text">Qual é a resposta?</h3>
+            <p class="text-purple-300 mb-4">Decifre o enigma e insira sua resposta abaixo:</p>
+            <input type="text" id="answerInput" class="answer-input" placeholder="Sua resposta...">
+            <div id="errorMessage" class="error-message">
+                Quase. Mas os ecos antigos não respondem em tua língua.
+            </div>
+            <div id="wrongAnswerMessage" class="error-message" style="display: none;">
+                Essa não parece ser a resposta correta. Releia o poema com atenção.
+            </div>
+            <button id="submitAnswerBtn" class="submit-btn">Enviar</button>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const answerBtn = document.getElementById('answerBtn');
+        const answerModal = document.getElementById('answerModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const submitAnswerBtn = document.getElementById('submitAnswerBtn');
+        const answerInput = document.getElementById('answerInput');
+        const errorMessage = document.getElementById('errorMessage');
+        const wrongAnswerMessage = document.getElementById('wrongAnswerMessage');
+        const successMessage = document.getElementById('successMessage');
+        const nextStepBtn = document.getElementById('nextStepBtn');
+        
+        // Open modal when answer button is clicked
+        answerBtn.addEventListener('click', () => {
+            answerModal.classList.add('active');
+            answerInput.focus();
+            // Reset input state when opening modal
+            answerInput.classList.remove('error');
+            errorMessage.style.display = 'none';
+            wrongAnswerMessage.style.display = 'none';
+        });
+        
+        // Close modal
+        closeModalBtn.addEventListener('click', () => {
+            answerModal.classList.remove('active');
+        });
+        
+        // Submit answer
+        submitAnswerBtn.addEventListener('click', checkAnswer);
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkAnswer();
+        });
+        
+        // Check if answer is correct
+        function checkAnswer() {
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            // Accept variations of "silentium" (Latin for silence) and its forms
+            const correctAnswers = [
+                'silentium',        // nominative singular
+                'silenti',          // genitive singular
+                'silentio',         // dative/ablative singular
+                'silentium',        // accusative singular
+                'silentie',         // vocative singular
+                'silentia',         // nominative/accusative plural
+                'silentiorum',      // genitive plural
+                'silentiis',        // dative/ablative plural
+                'silentia',         // vocative plural
+                'taciturnitas',     // alternative Latin word for silence
+                'quies',            // another Latin word meaning quiet/silence
+                'silens',           // present participle (being silent)
+                'sileo',            // verb "to be silent"
+                'siles',            // you are silent
+                'silent'            // English version
+            ];
+            
+            // Check for "silencio" variations (Portuguese)
+            const portugueseSilenceVariations = [
+                'silencio',
+                'silêncio',
+                'silencioso',
+                'silenciosa',
+                'silenciar',
+                'silenciamento',
+                'silenciamento',
+                'silenciado'
+            ];
+            
+            if (correctAnswers.includes(userAnswer)) {
+                // Correct answer
+                answerModal.classList.remove('active');
+                successMessage.style.display = 'block';
+                answerBtn.style.display = 'none';
+                nextStepBtn.style.display = 'block';
+                
+                // Create confetti effect
+                createConfetti();
+            } else if (portugueseSilenceVariations.includes(userAnswer)) {
+                // Portuguese variation of "silence" - show special error message
+                answerInput.classList.add('error');
+                errorMessage.style.display = 'block';
+                wrongAnswerMessage.style.display = 'none';
+                answerInput.focus();
+            } else {
+                // Completely wrong answer - show generic error message
+                answerInput.classList.add('error');
+                errorMessage.style.display = 'none';
+                wrongAnswerMessage.style.display = 'block';
+                answerInput.focus();
+            }
+        }
+        
+        // Create confetti effect - updated to be fully purple
+        function createConfetti() {
+            const purpleShades = [
+                '#8a2be2', '#9400d3', '#9932cc', '#ba55d3', '#da70d6',
+                '#d8bfd8', '#dda0dd', '#ee82ee', '#ff00ff', '#ff77ff',
+                '#e6e6fa', '#9370db', '#663399', '#4b0082', '#800080'
+            ];
+            
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = purpleShades[Math.floor(Math.random() * purpleShades.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.width = (Math.random() * 8 + 5) + 'px';
+                confetti.style.height = (Math.random() * 8 + 5) + 'px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+        
+        // Next step button functionality
+        nextStepBtn.addEventListener('click', () => {
+            alert('Você avançou para a próxima etapa do mistério!');
+            // Here you would typically redirect or load the next step
+        });
+    </script>
+</body>
+</html>

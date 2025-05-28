@@ -72,6 +72,7 @@
             }
         }
         
+        /* Answer button styles */
         .answer-btn {
             background: linear-gradient(135deg, rgba(106, 13, 173, 0.7) 0%, rgba(49, 0, 98, 0.7) 100%);
             border: 1px solid rgba(138, 43, 226, 0.5);
@@ -124,6 +125,7 @@
             }
         }
         
+        /* Success state button */
         .answer-btn.success {
             background: linear-gradient(135deg, rgba(17, 17, 78, 0.9) 0%, rgba(8, 8, 40, 0.9) 100%);
             border-color: rgba(68, 68, 255, 0.5);
@@ -132,6 +134,7 @@
             overflow: hidden;
         }
         
+        /* Next step button - updated to match answer button style */
         .next-step-btn {
             background: linear-gradient(135deg, rgba(106, 13, 173, 0.7) 0%, rgba(49, 0, 98, 0.7) 100%);
             border: 1px solid rgba(138, 43, 226, 0.5);
@@ -173,6 +176,7 @@
             animation: shine 3s infinite;
         }
         
+        /* Answer modal styles */
         .answer-modal {
             position: fixed;
             top: 0;
@@ -264,6 +268,7 @@
             opacity: 1;
         }
         
+        /* Success message */
         .success-message {
             display: none;
             text-align: center;
@@ -278,6 +283,7 @@
             to { opacity: 1; }
         }
         
+        /* Confetti effect */
         .confetti {
             position: fixed;
             width: 10px;
@@ -299,6 +305,7 @@
             }
         }
     </style>
+    <!-- Gaius sussurra sempre três passos a frente  -->
 </head>
 <body class="text-purple-200 flex flex-col items-center justify-center p-4">
     <div class="max-w-2xl w-full text-center space-y-6">
@@ -313,6 +320,7 @@
                  class="mystery-bbird w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain pulse">
         </div>
         
+        <!-- Modified answer button -->
         <button id="openAnswerBtn" class="answer-btn glow-text">
             Escrever Resposta
         </button>
@@ -321,6 +329,7 @@
             Resposta correta! O caminho se abre diante de você...
         </div>
         
+        <!-- Next step button (initially hidden) - updated to match answer button style -->
         <button id="nextStepBtn" class="next-step-btn glow-text">
             Próxima Etapa →
         </button>
@@ -333,6 +342,7 @@
         </div>
     </div>
 
+    <!-- Answer Modal -->
     <div id="answerModal" class="answer-modal">
         <div class="answer-container">
             <button id="closeAnswerBtn" class="close-btn">×</button>
@@ -344,39 +354,7 @@
     </div>
 
     <script>
-        // Função para gerar hash simples (não é criptograficamente segura, mas dificulta a descoberta da resposta)
-        function simpleHash(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash; // Convert to 32bit integer
-            }
-            return hash.toString();
-        }
-
-        // Função para normalizar a resposta (remover acentos e converter para minúsculas)
-        function normalizeAnswer(answer) {
-            return answer.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
-        }
-
-        // Lista de hashes das respostas aceitas (em vez do texto claro)
-        const acceptedHashes = [
-            '111830',   // hash de 'ruínas'
-            '111830',   // hash de 'ruinas'
-            '111830',   // hash de 'Ruínas'
-            '111830',   // hash de 'Ruinas'
-            '111830',   // hash de 'RUÍNAS'
-            '111830',   // hash de 'RUINAS'
-            '111830',   // hash de 'ruína'
-            '111830',   // hash de 'ruina'
-            '111830',   // hash de 'Ruína'
-            '111830',   // hash de 'Ruina'
-            '111830',   // hash de 'RUÍNA'
-            '111830'    // hash de 'RUINA'
-        ];
-
-        // Elementos do DOM
+        // Answer modal functionality
         const openAnswerBtn = document.getElementById('openAnswerBtn');
         const closeAnswerBtn = document.getElementById('closeAnswerBtn');
         const answerModal = document.getElementById('answerModal');
@@ -385,6 +363,13 @@
         const successMessage = document.getElementById('successMessage');
         const errorMessage = document.getElementById('errorMessage');
         const nextStepBtn = document.getElementById('nextStepBtn');
+        
+        // List of accepted answers (case and accent insensitive)
+        const acceptedAnswers = [
+            'ruínas', 'ruinas', 'Ruínas', 'Ruinas', 
+            'RUÍNAS', 'RUINAS', 'ruína', 'ruina',
+            'Ruína', 'Ruina', 'RUÍNA', 'RUINA'
+        ];
         
         openAnswerBtn.addEventListener('click', () => {
             answerModal.classList.add('active');
@@ -397,7 +382,7 @@
         });
         
         submitAnswerBtn.addEventListener('click', () => {
-            const answer = answerInput.value;
+            const answer = answerInput.value.trim();
             
             if (!answer) {
                 errorMessage.textContent = 'Por favor, digite sua resposta antes de enviar.';
@@ -405,49 +390,57 @@
                 return;
             }
             
-            // Normaliza a resposta e gera o hash
-            const normalizedAnswer = normalizeAnswer(answer);
-            const answerHash = simpleHash(normalizedAnswer);
+            // Normalize the answer by removing accents and converting to lowercase
+            const normalizedAnswer = answer.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            const normalizedAccepted = acceptedAnswers.map(a => 
+                a.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+            );
             
-            // Verifica se o hash está na lista de hashes aceitos
-            if (acceptedHashes.includes(answerHash)) {
-                // Resposta correta
+            if (normalizedAccepted.includes(normalizedAnswer)) {
+                // Correct answer
                 answerInput.value = '';
                 answerModal.classList.remove('active');
                 successMessage.style.display = 'block';
                 nextStepBtn.style.display = 'block';
                 
+                // Create confetti effect
                 createConfetti();
                 
+                // Change button style to indicate success
                 openAnswerBtn.textContent = '✓ Resposta Correta';
                 openAnswerBtn.classList.add('success');
                 openAnswerBtn.style.cursor = 'default';
                 openAnswerBtn.onclick = null;
                 
+                // Hide the error message if it was shown
                 errorMessage.classList.add('hidden');
             } else {
-                // Resposta incorreta
+                // Incorrect answer
                 errorMessage.textContent = 'Resposta incorreta. Tente novamente.';
                 errorMessage.classList.remove('hidden');
             }
         });
         
+        // Next step button functionality
         nextStepBtn.addEventListener('click', () => {
             window.location.href = "energia3.html";
         });
         
+        // Close modal when clicking outside
         answerModal.addEventListener('click', (e) => {
             if (e.target === answerModal) {
                 answerModal.classList.remove('active');
             }
         });
         
+        // Close modal with Escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' and answerModal.classList.contains('active')) {
+            if (e.key === 'Escape' && answerModal.classList.contains('active')) {
                 answerModal.classList.remove('active');
             }
         });
         
+        // Confetti effect function
         function createConfetti() {
             for (let i = 0; i < 100; i++) {
                 const confetti = document.createElement('div');
@@ -460,26 +453,11 @@
                 
                 document.body.appendChild(confetti);
                 
+                // Remove confetti after animation
                 setTimeout(() => {
                     confetti.remove();
                 }, 3000);
             }
-        }
-
-        // Técnica adicional: ofuscação do código
-        // Esta função será chamada apenas quando necessário
-        function validateAnswer(answer) {
-            // Aqui poderíamos implementar uma verificação mais complexa
-            // Mas estamos usando o hash para dificultar a descoberta
-            const h = simpleHash(normalizeAnswer(answer));
-            return acceptedHashes.includes(h);
-        }
-
-        // Técnica adicional: resposta pode ser construída dinamicamente
-        // Isso dificulta a busca por strings no código
-        function getAnswerHint() {
-            const parts = ['r', 'u', 'í', 'n', 'a', 's'];
-            return parts.join('').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
     </script>
 </body>

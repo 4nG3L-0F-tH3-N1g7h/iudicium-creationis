@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fase 1: O Começo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap');
+        
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a001a 100%);
+            min-height: 100vh;
+            font-family: 'Cinzel Decorative', serif;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.9);
+        }
+        
+        .flicker {
+            animation: flicker 5s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 22%, 24%, 55% {
+                opacity: 0.6;
+            }
+        }
+        
+        .mystery-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+            margin: 3rem auto; /* Increased margin-top from 1rem to 3rem */
+            display: block;
+            width: 40%;
+            max-width: 300px;
+            transition: all 0.3s ease;
+        }
+        
+        .mystery-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.7);
+        }
+    </style>
+</head>
+<body class="text-purple-200 flex flex-col items-center justify-center p-4">
+    <div class="max-w-4xl w-full text-center space-y-12"> <!-- Increased space-y from 6 to 12 -->
+        <h1 class="text-3xl md:text-5xl font-bold glow-text flicker">iudicium creationis</h1>
+        
+        <img src="https://i.postimg.cc/87cnC95S/image.png" alt="Mystery Image" class="mystery-image">
+    </div>
+</body>
+</html>
